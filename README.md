@@ -24,21 +24,21 @@ RapidAid is a real-time emergency assistance platform that helps users quickly l
 ## Project Workflow
 
 User Location
-↓
+->
 Geocoding (Geopy + Nominatim)
-↓
+->
 Latitude & Longitude
-↓
+->
 OpenStreetMap Overpass API
-↓
+->
 Nearby Hospitals
-↓
+->
 OpenRouteService API
-↓
+->
 Distance & ETA
-↓
+->
 Traffic Status
-↓
+->
 Results Displayed to User
 
 ---
