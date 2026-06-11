@@ -387,9 +387,14 @@ st.markdown("""
 st.markdown('<div class="section-title"><span class="bar"></span>📍 Your Location</div>', unsafe_allow_html=True)
 
 with st.container():
-    city = st.text_input(
-        "City or area",
-        placeholder="e.g. Hyderabad, Banjara Hills"
+    city = st.selectbox(
+       "City or area",
+       [
+           "Hyderabad",
+           "Hyderabad, Banjara Hills",
+           "Hyderabad, Miyapur",
+           "Hyderabad, Uppal"
+        ]
     )
     col1, col2 = st.columns(2)
     with col1:
@@ -398,7 +403,13 @@ with st.container():
     with col2:
         search = st.button("🔍  Find Nearest Help")
     if search and city:
-        coords = get_coordinates(city)
+        demo_locations = {
+            "Hyderabad": (17.3850, 78.4867),
+            "Hyderabad, Banjara Hills": (17.4126, 78.4482),
+            "Hyderabad, Miyapur": (17.4967, 78.3567),
+            "Hyderabad, Uppal": (17.4058, 78.5591)
+        }
+        coords = demo_locations.get(city)
         if coords:
             lat, lon = coords
             hospitals = get_nearby_hospitals(lat, lon)
