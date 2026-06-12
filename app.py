@@ -5,29 +5,220 @@ from services.location import get_coordinates
 from services.hospitals import get_nearby_hospitals
 from services.routes import get_route, traffic_status
 from services.ai_assistant import ask_ollama
+
+# -----------------------------------
+# CENTRALIZED TRANSLATION DICTIONARY
+# -----------------------------------
 LANGUAGES = {
     "English": {
+        # Hero
         "hero_title": "RapidAid — Get help, faster.",
-        "location": "📍 Your Location",
-        "contacts": "🚨 Emergency Contacts",
-        "assistant": "🤖 AI Emergency Assistant",
-        "advice": "Get AI Advice"
+        "hero_subtitle": "Real-time hospital routing, live traffic intelligence, and one-tap access to emergency services.",
+        "hero_badge": "AI Emergency Navigator · Live",
+
+        # Section headings
+        "section_location": "📍 Your Location",
+        "section_hospitals": "🏥 Nearby Hospitals",
+        "section_hospital_list": "📋 Hospital List",
+        "section_map": "🗺️ Live Map",
+        "section_contacts": "🚨 Emergency Contacts",
+        "section_assistant": "🤖 AI Emergency Assistant",
+
+        # Location inputs
+        "label_city": "City or area",
+        "btn_use_location": "📍  Use Current Location",
+        "btn_find_help": "🔍  Find Nearest Help",
+
+        # Hospital table columns
+        "col_hospital": "Hospital",
+        "col_distance": "Distance",
+        "col_eta": "ETA",
+        "col_traffic": "Traffic",
+        "btn_directions": "Directions",
+        "label_top_hospital": "Top Hospital",
+
+        # Map
+        "map_destination": "🏥 Destination",
+
+        # Emergency contacts
+        "ec_ambulance_label": "Ambulance",
+        "ec_ambulance_sub": "24/7 Medical Emergency",
+        "ec_police_label": "Police",
+        "ec_police_sub": "National Emergency Line",
+        "ec_fire_label": "Fire Brigade",
+        "ec_fire_sub": "Fire & Rescue Services",
+
+        # AI Assistant
+        "label_ai_mode": "Choose AI Mode",
+        "label_api_key": "Enter OpenAI API Key",
+        "label_question": "Ask an emergency question",
+        "placeholder_question": "Example: What should I do before reaching the hospital for chest pain?",
+        "btn_get_advice": "Get AI Advice",
+        "ai_response_header": "### AI Response",
+        "warn_no_question": "Please enter a question.",
+        "err_ai": "Error",
+        "spinner_ai": "Getting AI advice...",
+
+        # AI language instruction (injected into prompt)
+        "ai_lang_instruction": "Answer in English.",
+
+        # Errors / warnings
+        "err_location_not_found": "Location not found",
+        "msg_selected": "Selected",
+
+        # Footer
+        "footer_tagline": "Smart Emergency Route Finder",
+        "footer_credit": "Built with ❤️ for safer cities - By: M.Anila, P.Shivani",
+
+        # Language screen
+        "lang_screen_title": "Choose Your Language",
+        "lang_select_label": "Select Language",
+        "btn_continue": "Continue",
     },
+
     "Telugu": {
+        # Hero
         "hero_title": "రాపిడ్ ఎయిడ్ — వేగంగా సహాయం పొందండి.",
-        "location": "📍 మీ స్థానం",
-        "contacts": "🚨 అత్యవసర సంప్రదింపులు",
-        "assistant": "🤖 AI అత్యవసర సహాయకుడు",
-        "advice": "AI సలహా పొందండి"
+        "hero_subtitle": "రియల్-టైమ్ ఆసుపత్రి మార్గం, లైవ్ ట్రాఫిక్ సమాచారం, మరియు అత్యవసర సేవలకు వన్-ట్యాప్ యాక్సెస్.",
+        "hero_badge": "AI అత్యవసర నావిగేటర్ · లైవ్",
+
+        # Section headings
+        "section_location": "📍 మీ స్థానం",
+        "section_hospitals": "🏥 సమీప ఆసుపత్రులు",
+        "section_hospital_list": "📋 ఆసుపత్రి జాబితా",
+        "section_map": "🗺️ లైవ్ మ్యాప్",
+        "section_contacts": "🚨 అత్యవసర సంప్రదింపులు",
+        "section_assistant": "🤖 AI అత్యవసర సహాయకుడు",
+
+        # Location inputs
+        "label_city": "నగరం లేదా ప్రాంతం",
+        "btn_use_location": "📍  ప్రస్తుత స్థానాన్ని ఉపయోగించండి",
+        "btn_find_help": "🔍  సమీప సహాయం కనుగొనండి",
+
+        # Hospital table columns
+        "col_hospital": "ఆసుపత్రి",
+        "col_distance": "దూరం",
+        "col_eta": "సమయం",
+        "col_traffic": "ట్రాఫిక్",
+        "btn_directions": "దిశలు",
+        "label_top_hospital": "అగ్రశ్రేణి ఆసుపత్రి",
+
+        # Map
+        "map_destination": "🏥 గమ్యస్థానం",
+
+        # Emergency contacts
+        "ec_ambulance_label": "అంబులెన్స్",
+        "ec_ambulance_sub": "24/7 వైద్య అత్యవసర స్థితి",
+        "ec_police_label": "పోలీసు",
+        "ec_police_sub": "జాతీయ అత్యవసర లైన్",
+        "ec_fire_label": "అగ్నిమాపక దళం",
+        "ec_fire_sub": "అగ్నిమాపక & రెస్క్యూ సేవలు",
+
+        # AI Assistant
+        "label_ai_mode": "AI మోడ్ ఎంచుకోండి",
+        "label_api_key": "OpenAI API కీని నమోదు చేయండి",
+        "label_question": "అత్యవసర ప్రశ్న అడగండి",
+        "placeholder_question": "ఉదాహరణ: గుండె నొప్పి కోసం ఆసుపత్రికి చేరుకునే ముందు నేను ఏమి చేయాలి?",
+        "btn_get_advice": "AI సలహా పొందండి",
+        "ai_response_header": "### AI సమాధానం",
+        "warn_no_question": "దయచేసి ఒక ప్రశ్న నమోదు చేయండి.",
+        "err_ai": "లోపం",
+        "spinner_ai": "AI సలహా పొందుతున్నారు...",
+
+        # AI language instruction
+        "ai_lang_instruction": "దయచేసి కేవలం తెలుగులో మాత్రమే సమాధానం ఇవ్వండి.",
+
+        # Errors / warnings
+        "err_location_not_found": "స్థానం కనుగొనబడలేదు",
+        "msg_selected": "ఎంచుకున్నారు",
+
+        # Footer
+        "footer_tagline": "స్మార్ట్ అత్యవసర మార్గ అన్వేషకుడు",
+        "footer_credit": "సురక్షిత నగరాల కోసం ❤️ తో నిర్మించబడింది - రచయితలు: M.అనిల, P.శివాని",
+
+        # Language screen
+        "lang_screen_title": "మీ భాషను ఎంచుకోండి",
+        "lang_select_label": "భాష ఎంచుకోండి",
+        "btn_continue": "కొనసాగించు",
     },
+
     "Hindi": {
+        # Hero
         "hero_title": "रैपिडएड — जल्दी सहायता पाएं।",
-        "location": "📍 आपका स्थान",
-        "contacts": "🚨 आपातकालीन संपर्क",
-        "assistant": "🤖 AI आपातकालीन सहायक",
-        "advice": "AI सलाह प्राप्त करें"
-    }
+        "hero_subtitle": "रियल-टाइम अस्पताल रूटिंग, लाइव ट्रैफिक इंटेलिजेंस, और आपातकालीन सेवाओं तक वन-टैप एक्सेस।",
+        "hero_badge": "AI आपातकालीन नेविगेटर · लाइव",
+
+        # Section headings
+        "section_location": "📍 आपका स्थान",
+        "section_hospitals": "🏥 पास के अस्पताल",
+        "section_hospital_list": "📋 अस्पताल सूची",
+        "section_map": "🗺️ लाइव मैप",
+        "section_contacts": "🚨 आपातकालीन संपर्क",
+        "section_assistant": "🤖 AI आपातकालीन सहायक",
+
+        # Location inputs
+        "label_city": "शहर या क्षेत्र",
+        "btn_use_location": "📍  वर्तमान स्थान उपयोग करें",
+        "btn_find_help": "🔍  नजदीकी सहायता खोजें",
+
+        # Hospital table columns
+        "col_hospital": "अस्पताल",
+        "col_distance": "दूरी",
+        "col_eta": "समय",
+        "col_traffic": "ट्रैफिक",
+        "btn_directions": "दिशाएं",
+        "label_top_hospital": "शीर्ष अस्पताल",
+
+        # Map
+        "map_destination": "🏥 गंतव्य",
+
+        # Emergency contacts
+        "ec_ambulance_label": "एम्बुलेंस",
+        "ec_ambulance_sub": "24/7 चिकित्सा आपातकाल",
+        "ec_police_label": "पुलिस",
+        "ec_police_sub": "राष्ट्रीय आपातकालीन लाइन",
+        "ec_fire_label": "अग्निशमन दल",
+        "ec_fire_sub": "अग्निशमन और बचाव सेवाएं",
+
+        # AI Assistant
+        "label_ai_mode": "AI मोड चुनें",
+        "label_api_key": "OpenAI API कुंजी दर्ज करें",
+        "label_question": "आपातकालीन प्रश्न पूछें",
+        "placeholder_question": "उदाहरण: सीने में दर्द के लिए अस्पताल पहुंचने से पहले मुझे क्या करना चाहिए?",
+        "btn_get_advice": "AI सलाह प्राप्त करें",
+        "ai_response_header": "### AI प्रतिक्रिया",
+        "warn_no_question": "कृपया एक प्रश्न दर्ज करें।",
+        "err_ai": "त्रुटि",
+        "spinner_ai": "AI सलाह प्राप्त की जा रही है...",
+
+        # AI language instruction
+        "ai_lang_instruction": "कृपया केवल हिंदी में उत्तर दें।",
+
+        # Errors / warnings
+        "err_location_not_found": "स्थान नहीं मिला",
+        "msg_selected": "चुना गया",
+
+        # Footer
+        "footer_tagline": "स्मार्ट आपातकालीन मार्ग खोजक",
+        "footer_credit": "सुरक्षित शहरों के लिए ❤️ के साथ बनाया गया - द्वारा: M.अनिला, P.शिवानी",
+
+        # Language screen
+        "lang_screen_title": "अपनी भाषा चुनें",
+        "lang_select_label": "भाषा चुनें",
+        "btn_continue": "जारी रखें",
+    },
 }
+
+
+# -----------------------------------
+# HELPER FUNCTION
+# -----------------------------------
+def t(key: str) -> str:
+    """Look up a translation key for the active language, falling back to English."""
+    lang = st.session_state.get("language", "English")
+    return LANGUAGES.get(lang, LANGUAGES["English"]).get(key, LANGUAGES["English"].get(key, key))
+
+
 # -----------------------------------
 # PAGE CONFIG (must be first Streamlit call)
 # -----------------------------------
@@ -44,7 +235,26 @@ language = st.sidebar.selectbox(
 
 t = LANGUAGES[language]
 # -----------------------------------
-# PREMIUM CUSTOM CSS
+# LANGUAGE SELECTION SCREEN
+# -----------------------------------
+if "language" not in st.session_state:
+    st.title("Choose Your Language")
+    st.subheader("భాష ఎంచుకోండి")
+    st.subheader("भाषा चुनें")
+
+    selected_language = st.selectbox(
+        "Select Language",
+        ["English", "Telugu", "Hindi"]
+    )
+
+    if st.button("Continue"):
+        st.session_state.language = selected_language
+        st.rerun()
+
+    st.stop()
+
+# -----------------------------------
+# PREMIUM CUSTOM CSS (unchanged)
 # -----------------------------------
 st.markdown("""
 <style>
@@ -72,7 +282,6 @@ h1, h2, h3, h4, h5 {
     background-attachment: fixed;
 }
 
-/* Subtle animated grid overlay */
 .stApp::before {
     content: "";
     position: fixed;
@@ -94,7 +303,6 @@ h1, h2, h3, h4, h5 {
     z-index: 1;
 }
 
-/* Hide Streamlit chrome */
 #MainMenu, footer, header [data-testid="stToolbar"] { visibility: hidden; }
 
 /* ---------- HERO ---------- */
@@ -377,7 +585,7 @@ hr {
     margin: 32px 0 !important;
 }
 
-/* ---------- CAPTION ---------- */
+/* ---------- FOOTER ---------- */
 .footer-bar {
     margin-top: 40px;
     padding: 18px 22px;
@@ -400,41 +608,41 @@ hr {
 # -----------------------------------
 # HERO
 # -----------------------------------
-st.markdown("""
+st.markdown(f"""
 <div class="hero fade-in">
-    <div class="hero-badge"><span class="dot"></span> AI Emergency Navigator · Live</div>
-    <h1>RapidAid — Get help, faster.</h1>
-    <p>Real-time hospital routing, live traffic intelligence, and one-tap access to emergency services — designed for the seconds that matter most.</p>
+    <div class="hero-badge"><span class="dot"></span> {t("hero_badge")}</div>
+    <h1>{t("hero_title")}</h1>
+    <p>{t("hero_subtitle")}</p>
 </div>
 """, unsafe_allow_html=True)
 
 # -----------------------------------
 # LOCATION INPUT
 # -----------------------------------
-st.markdown('<div class="section-title"><span class="bar"></span>📍 Your Location</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="section-title"><span class="bar"></span>{t("section_location")}</div>', unsafe_allow_html=True)
 
 with st.container():
     city = st.selectbox(
-       "City or area",
-       [
-           "Hyderabad",
-           "Hyderabad, Banjara Hills",
-           "Hyderabad, Miyapur",
-           "Hyderabad, Uppal"
+        t("label_city"),
+        [
+            "Hyderabad",
+            "Hyderabad, Banjara Hills",
+            "Hyderabad, Miyapur",
+            "Hyderabad, Uppal",
         ]
     )
     col1, col2 = st.columns(2)
     with col1:
-        current_location = st.button("📍  Use Current Location")
-
+        current_location = st.button(t("btn_use_location"))
     with col2:
-        search = st.button("🔍  Find Nearest Help")
+        search = st.button(t("btn_find_help"))
+
     if search and city:
         demo_locations = {
             "Hyderabad": (17.3850, 78.4867),
             "Hyderabad, Banjara Hills": (17.4126, 78.4482),
             "Hyderabad, Miyapur": (17.4967, 78.3567),
-            "Hyderabad, Uppal": (17.4058, 78.5591)
+            "Hyderabad, Uppal": (17.4058, 78.5591),
         }
         coords = demo_locations.get(city)
         if coords:
@@ -444,20 +652,19 @@ with st.container():
             st.session_state["user_lon"] = lon
             st.session_state["hospitals"] = hospitals
             st.session_state["searched"] = True
-
         else:
-            st.error("Location not found")
+            st.error(t("err_location_not_found"))
 
 # -----------------------------------
 # RESULTS
 # -----------------------------------
 if st.session_state.get("searched", False):
     st.markdown(
-        '<div class="section-title"><span class="bar"></span>🏥 Nearby Hospitals '
-        '<span class="status-pill" style="margin-left:10px;"><span class="live"></span>Live</span></div>',
-        unsafe_allow_html=True
+        f'<div class="section-title"><span class="bar"></span>{t("section_hospitals")} '
+        f'<span class="status-pill" style="margin-left:10px;"><span class="live"></span>Live</span></div>',
+        unsafe_allow_html=True,
     )
-    
+
     hospital_list = st.session_state.get("hospitals", [])
     if hospital_list:
         first_hospital = hospital_list[0]
@@ -465,28 +672,32 @@ if st.session_state.get("searched", False):
             st.session_state["user_lat"],
             st.session_state["user_lon"],
             first_hospital["lat"],
-            first_hospital["lon"]
+            first_hospital["lon"],
         )
         traffic = traffic_status(eta)
         c1, c2, c3, c4 = st.columns(4)
         with c1:
-            st.metric("Top Hospital", first_hospital["name"])
+            st.metric(t("label_top_hospital"), first_hospital["name"])
         with c2:
-            st.metric("Distance", f"{distance} km")
+            st.metric(t("col_distance"), f"{distance} km")
         with c3:
-            st.metric("ETA", f"{eta} min")
+            st.metric(t("col_eta"), f"{eta} min")
         with c4:
-            st.metric("Traffic", traffic)
+            st.metric(t("col_traffic"), traffic)
 
-    st.markdown('<div class="section-title" style="margin-top:28px;"><span class="bar"></span>📋 Hospital List</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="section-title" style="margin-top:28px;"><span class="bar"></span>{t("section_hospital_list")}</div>',
+        unsafe_allow_html=True,
+    )
+
     hospital_list = st.session_state.get("hospitals", [])
     for hospital in hospital_list[:10]:
         try:
             distance, eta = get_route(
-            st.session_state["user_lat"],
-            st.session_state["user_lon"],
-            hospital["lat"],
-            hospital["lon"]
+                st.session_state["user_lat"],
+                st.session_state["user_lon"],
+                hospital["lat"],
+                hospital["lon"],
             )
             traffic = traffic_status(eta)
             col1, col2, col3, col4, col5 = st.columns([4, 2, 2, 2, 2])
@@ -499,12 +710,9 @@ if st.session_state.get("searched", False):
             with col4:
                 st.write(traffic)
             with col5:
-                if st.button(
-                    "Directions",
-                    key=hospital["name"]
-                ):
+                if st.button(t("btn_directions"), key=hospital["name"]):
                     st.session_state["selected_hospital"] = hospital
-                    st.success(f"Selected: {hospital['name']}")
+                    st.success(f"{t('msg_selected')}: {hospital['name']}")
                     st.rerun()
         except Exception:
             pass
@@ -512,118 +720,88 @@ if st.session_state.get("searched", False):
 # -----------------------------------
 # MAP
 # -----------------------------------
-
 if st.session_state.get("searched", False):
-
     st.markdown(
-        '<div class="section-title"><span class="bar"></span>🗺️ Live Map</div>',
-        unsafe_allow_html=True
+        f'<div class="section-title"><span class="bar"></span>{t("section_map")}</div>',
+        unsafe_allow_html=True,
     )
 
     user_lat = st.session_state.get("user_lat")
     user_lon = st.session_state.get("user_lon")
-    
     selected = st.session_state.get("selected_hospital")
 
     if user_lat is not None and user_lon is not None:
-
         if selected:
-            m = folium.Map(
-                location=[selected["lat"], selected["lon"]],
-                zoom_start=15
-            )
+            m = folium.Map(location=[selected["lat"], selected["lon"]], zoom_start=15)
         else:
-            m = folium.Map(
-                location=[user_lat, user_lon],
-                zoom_start=13
-            )
+            m = folium.Map(location=[user_lat, user_lon], zoom_start=13)
 
-        # User Marker
         folium.Marker(
             [user_lat, user_lon],
             popup="Your Location",
             tooltip="You",
-            icon=folium.Icon(color="blue")
+            icon=folium.Icon(color="blue"),
         ).add_to(m)
 
-        # Hospital Markers
         for hospital in st.session_state.get("hospitals", []):
-
             folium.Marker(
                 [hospital["lat"], hospital["lon"]],
                 popup=hospital["name"],
                 tooltip=hospital["name"],
-                icon=folium.Icon(color="red")
+                icon=folium.Icon(color="red"),
             ).add_to(m)
 
-        # Selected Hospital Route
-        selected = st.session_state.get("selected_hospital")
-        
         if selected:
-            st.success(f"🏥 Destination: {selected['name']}")
+            st.success(f"{t('map_destination')}: {selected['name']}")
 
-        if selected:
-            selected = st.session_state.get("selected_hospital")
-
-            # Highlight selected hospital
             folium.Marker(
                 [selected["lat"], selected["lon"]],
                 popup=selected["name"],
                 tooltip=selected["name"],
-                icon=folium.Icon(
-                    color="green",
-                    icon ="plus-sign"
-                )
+                icon=folium.Icon(color="green", icon="plus-sign"),
             ).add_to(m)
 
-            # Route Line
             folium.PolyLine(
-                [
-                    [user_lat, user_lon],
-                    [selected["lat"], selected["lon"]]
-                ],
+                [[user_lat, user_lon], [selected["lat"], selected["lon"]]],
                 color="blue",
                 weight=6,
-                opacity=0.8
+                opacity=0.8,
             ).add_to(m)
 
-        st_folium(
-            m,
-            width=None,
-            height=500
-        )
-
-
+        st_folium(m, width=None, height=500)
 
 # -----------------------------------
 # EMERGENCY CONTACTS
 # -----------------------------------
-st.markdown('<div class="section-title"><span class="bar"></span>🚨 Emergency Contacts</div>', unsafe_allow_html=True)
+st.markdown(
+    f'<div class="section-title"><span class="bar"></span>{t("section_contacts")}</div>',
+    unsafe_allow_html=True,
+)
 
 e1, e2, e3 = st.columns(3)
 with e1:
-    st.markdown("""
+    st.markdown(f"""
     <div class="emergency-card ec-ambulance">
         <div class="ec-icon">🚑</div>
-        <div class="ec-label">Ambulance</div>
+        <div class="ec-label">{t("ec_ambulance_label")}</div>
         <div class="ec-number">108</div>
-        <div class="ec-sub">24/7 Medical Emergency</div>
+        <div class="ec-sub">{t("ec_ambulance_sub")}</div>
     </div>""", unsafe_allow_html=True)
 with e2:
-    st.markdown("""
+    st.markdown(f"""
     <div class="emergency-card ec-police">
         <div class="ec-icon">👮</div>
-        <div class="ec-label">Police</div>
+        <div class="ec-label">{t("ec_police_label")}</div>
         <div class="ec-number">112</div>
-        <div class="ec-sub">National Emergency Line</div>
+        <div class="ec-sub">{t("ec_police_sub")}</div>
     </div>""", unsafe_allow_html=True)
 with e3:
-    st.markdown("""
+    st.markdown(f"""
     <div class="emergency-card ec-fire">
         <div class="ec-icon">🔥</div>
-        <div class="ec-label">Fire Brigade</div>
+        <div class="ec-label">{t("ec_fire_label")}</div>
         <div class="ec-number">101</div>
-        <div class="ec-sub">Fire & Rescue Services</div>
+        <div class="ec-sub">{t("ec_fire_sub")}</div>
     </div>""", unsafe_allow_html=True)
 # -----------------------------------
 # AI ASSISTANT
@@ -673,11 +851,50 @@ if st.button("Get AI Advice"):
 
                 st.error(f"Error: {e}")
 # -----------------------------------
+# AI ASSISTANT
+# -----------------------------------
+st.markdown(
+    f'<div class="section-title"><span class="bar"></span>{t("section_assistant")}</div>',
+    unsafe_allow_html=True,
+)
+
+model_type = st.selectbox(
+    t("label_ai_mode"),
+    ["Local Ollama", "BYOK OpenAI"]
+)
+
+api_key = ""
+if model_type == "BYOK OpenAI":
+    api_key = st.text_input(t("label_api_key"), type="password")
+
+question = st.text_area(
+    t("label_question"),
+    placeholder=t("placeholder_question"),
+)
+
+if st.button(t("btn_get_advice")):
+    if not question:
+        st.warning(t("warn_no_question"))
+    else:
+        with st.spinner(t("spinner_ai")):
+            try:
+                # Prepend language instruction so the model responds in the right language
+                lang_instruction = t("ai_lang_instruction")
+                localized_question = f"{lang_instruction}\n\n{question}"
+
+                answer = ask_ollama(localized_question)
+
+                st.markdown(t("ai_response_header"))
+                st.write(answer)
+            except Exception as e:
+                st.error(f"{t('err_ai')}: {e}")
+
+# -----------------------------------
 # FOOTER
 # -----------------------------------
-st.markdown("""
+st.markdown(f"""
 <div class="footer-bar">
-    <div><strong>RapidAid</strong> · Smart Emergency Route Finder</div>
-    <div>Built with ❤️ for safer cities - By: M.Anila, P.Shivani</div>
+    <div><strong>RapidAid</strong> · {t("footer_tagline")}</div>
+    <div>{t("footer_credit")}</div>
 </div>
 """, unsafe_allow_html=True)
