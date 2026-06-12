@@ -5,6 +5,29 @@ from services.location import get_coordinates
 from services.hospitals import get_nearby_hospitals
 from services.routes import get_route, traffic_status
 from services.ai_assistant import ask_ollama
+LANGUAGES = {
+    "English": {
+        "hero_title": "RapidAid — Get help, faster.",
+        "location": "📍 Your Location",
+        "contacts": "🚨 Emergency Contacts",
+        "assistant": "🤖 AI Emergency Assistant",
+        "advice": "Get AI Advice"
+    },
+    "Telugu": {
+        "hero_title": "రాపిడ్ ఎయిడ్ — వేగంగా సహాయం పొందండి.",
+        "location": "📍 మీ స్థానం",
+        "contacts": "🚨 అత్యవసర సంప్రదింపులు",
+        "assistant": "🤖 AI అత్యవసర సహాయకుడు",
+        "advice": "AI సలహా పొందండి"
+    },
+    "Hindi": {
+        "hero_title": "रैपिडएड — जल्दी सहायता पाएं।",
+        "location": "📍 आपका स्थान",
+        "contacts": "🚨 आपातकालीन संपर्क",
+        "assistant": "🤖 AI आपातकालीन सहायक",
+        "advice": "AI सलाह प्राप्त करें"
+    }
+}
 # -----------------------------------
 # PAGE CONFIG (must be first Streamlit call)
 # -----------------------------------
@@ -14,7 +37,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+language = st.sidebar.selectbox(
+    "Language",
+    list(LANGUAGES.keys())
+)
 
+t = LANGUAGES[language]
 # -----------------------------------
 # PREMIUM CUSTOM CSS
 # -----------------------------------
