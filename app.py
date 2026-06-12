@@ -1,11 +1,10 @@
 import streamlit as st
-import pandas as pd
 import folium
 from streamlit_folium import st_folium
 from services.location import get_coordinates
 from services.hospitals import get_nearby_hospitals
 from services.routes import get_route, traffic_status
-
+from services.ai_assistant import ask_ollama
 # -----------------------------------
 # PAGE CONFIG (must be first Streamlit call)
 # -----------------------------------
@@ -598,7 +597,53 @@ with e3:
         <div class="ec-number">101</div>
         <div class="ec-sub">Fire & Rescue Services</div>
     </div>""", unsafe_allow_html=True)
+# -----------------------------------
+# AI ASSISTANT
+# -----------------------------------
 
+st.markdown(
+    '<div class="section-title"><span class="bar"></span>🤖 AI Emergency Assistant</div>',
+    unsafe_allow_html=True
+)
+
+model_type = st.selectbox(
+    "Choose AI Mode",
+    [
+        "Local Ollama",
+        "BYOK OpenAI"
+    ]
+)
+
+api_key = ""
+
+if model_type == "BYOK OpenAI":
+    api_key = st.text_input(
+        "Enter OpenAI API Key",
+        type="password"
+    )
+
+question = st.text_area(
+    "Ask an emergency question",
+    placeholder="Example: What should I do before reaching the hospital for chest pain?"
+)
+
+if st.button("Get AI Advice"):
+
+    if not question:
+        st.warning("Please enter a question.")
+
+    else:
+        with st.spinner("Getting AI advice..."):
+
+            try:
+                answer = ask_ollama(question)
+
+                st.markdown("### AI Response")
+                st.write(answer)
+
+            except Exception as e:
+
+                st.error(f"Error: {e}")
 # -----------------------------------
 # FOOTER
 # -----------------------------------
