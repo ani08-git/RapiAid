@@ -34,11 +34,19 @@ LANGUAGES = {
         "col_distance": "Distance",
         "col_eta": "ETA",
         "col_traffic": "Traffic",
+        "unit_km": "km",
+        "unit_min": "min",
+        "traffic_normal": "Normal",
+        "traffic_moderate": "Moderate",
+        "traffic_heavy": "Heavy",
+        "status_live": "Live",
         "btn_directions": "Directions",
         "label_top_hospital": "Top Hospital",
 
         # Map
         "map_destination": "🏥 Destination",
+        "map_your_location": "Your Location",
+        "map_you": "You",
 
         # Emergency contacts
         "ec_ambulance_label": "Ambulance",
@@ -100,11 +108,19 @@ LANGUAGES = {
         "col_distance": "దూరం",
         "col_eta": "సమయం",
         "col_traffic": "ట్రాఫిక్",
+        "unit_km": "కి.మీ",
+        "unit_min": "నిమి",
+        "traffic_normal": "సాధారణం",
+        "traffic_moderate": "మధ్యస్థం",
+        "traffic_heavy": "ఎక్కువ",
+        "status_live": "లైవ్",
         "btn_directions": "దిశలు",
         "label_top_hospital": "అగ్రశ్రేణి ఆసుపత్రి",
 
         # Map
         "map_destination": "🏥 గమ్యస్థానం",
+        "map_your_location": "మీ స్థానం",
+        "map_you": "మీరు",
 
         # Emergency contacts
         "ec_ambulance_label": "అంబులెన్స్",
@@ -166,11 +182,19 @@ LANGUAGES = {
         "col_distance": "दूरी",
         "col_eta": "समय",
         "col_traffic": "ट्रैफिक",
+        "unit_km": "कि.मी.",
+        "unit_min": "मिनट",
+        "traffic_normal": "सामान्य",
+        "traffic_moderate": "मध्यम",
+        "traffic_heavy": "भारी",
+        "status_live": "लाइव",
         "btn_directions": "दिशाएं",
         "label_top_hospital": "शीर्ष अस्पताल",
 
         # Map
         "map_destination": "🏥 गंतव्य",
+        "map_your_location": "आपका स्थान",
+        "map_you": "आप",
 
         # Emergency contacts
         "ec_ambulance_label": "एम्बुलेंस",
@@ -219,6 +243,23 @@ def t(key: str) -> str:
     return LANGUAGES.get(lang, LANGUAGES["English"]).get(key, LANGUAGES["English"].get(key, key))
 
 
+def localized_traffic(status: str) -> str:
+    """Translate route traffic labels returned by services.routes.traffic_status."""
+    return t({
+        "Normal": "traffic_normal",
+        "Moderate": "traffic_moderate",
+        "Heavy": "traffic_heavy",
+    }.get(status, status))
+
+
+def localized_distance(distance: float) -> str:
+    return f"{distance} {t('unit_km')}"
+
+
+def localized_eta(eta: float) -> str:
+    return f"{eta} {t('unit_min')}"
+
+
 # -----------------------------------
 # PAGE CONFIG (must be first Streamlit call)
 # -----------------------------------
@@ -228,12 +269,14 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-language = st.sidebar.selectbox(
-    "Language",
-    list(LANGUAGES.keys())
-)
+if "language" in st.session_state:
+    st.session_state.language = st.sidebar.selectbox(
+        "Language",
+        list(LANGUAGES.keys()),
+        index=list(LANGUAGES.keys()).index(st.session_state.language),
+    )
 
-t = LANGUAGES[language]
+
 # -----------------------------------
 # LANGUAGE SELECTION SCREEN
 # -----------------------------------
@@ -661,7 +704,7 @@ with st.container():
 if st.session_state.get("searched", False):
     st.markdown(
         f'<div class="section-title"><span class="bar"></span>{t("section_hospitals")} '
-        f'<span class="status-pill" style="margin-left:10px;"><span class="live"></span>Live</span></div>',
+        f'<span class="status-pill" style="margin-left:10px;"><span class="live"></span>{t("status_live")}</span></div>',
         unsafe_allow_html=True,
     )
 
@@ -674,14 +717,14 @@ if st.session_state.get("searched", False):
             first_hospital["lat"],
             first_hospital["lon"],
         )
-        traffic = traffic_status(eta)
+        traffic = localized_traffic(traffic_status(eta))
         c1, c2, c3, c4 = st.columns(4)
         with c1:
             st.metric(t("label_top_hospital"), first_hospital["name"])
         with c2:
-            st.metric(t("col_distance"), f"{distance} km")
+            st.metric(t("col_distance"), localized_distance(distance))
         with c3:
-            st.metric(t("col_eta"), f"{eta} min")
+            st.metric(t("col_eta"), localized_eta(eta))
         with c4:
             st.metric(t("col_traffic"), traffic)
 
@@ -699,14 +742,14 @@ if st.session_state.get("searched", False):
                 hospital["lat"],
                 hospital["lon"],
             )
-            traffic = traffic_status(eta)
+            traffic = localized_traffic(traffic_status(eta))
             col1, col2, col3, col4, col5 = st.columns([4, 2, 2, 2, 2])
             with col1:
                 st.write(f"🏥 {hospital['name']}")
             with col2:
-                st.write(f"{distance} km")
+                st.write(localized_distance(distance))
             with col3:
-                st.write(f"{eta} min")
+                st.write(localized_eta(eta))
             with col4:
                 st.write(traffic)
             with col5:
@@ -738,8 +781,8 @@ if st.session_state.get("searched", False):
 
         folium.Marker(
             [user_lat, user_lon],
-            popup="Your Location",
-            tooltip="You",
+            popup=t("map_your_location"),
+            tooltip=t("map_you"),
             icon=folium.Icon(color="blue"),
         ).add_to(m)
 
@@ -803,53 +846,6 @@ with e3:
         <div class="ec-number">101</div>
         <div class="ec-sub">{t("ec_fire_sub")}</div>
     </div>""", unsafe_allow_html=True)
-# -----------------------------------
-# AI ASSISTANT
-# -----------------------------------
-
-st.markdown(
-    '<div class="section-title"><span class="bar"></span>🤖 AI Emergency Assistant</div>',
-    unsafe_allow_html=True
-)
-
-model_type = st.selectbox(
-    "Choose AI Mode",
-    [
-        "Local Ollama",
-        "BYOK OpenAI"
-    ]
-)
-
-api_key = ""
-
-if model_type == "BYOK OpenAI":
-    api_key = st.text_input(
-        "Enter OpenAI API Key",
-        type="password"
-    )
-
-question = st.text_area(
-    "Ask an emergency question",
-    placeholder="Example: What should I do before reaching the hospital for chest pain?"
-)
-
-if st.button("Get AI Advice"):
-
-    if not question:
-        st.warning("Please enter a question.")
-
-    else:
-        with st.spinner("Getting AI advice..."):
-
-            try:
-                answer = ask_ollama(question)
-
-                st.markdown("### AI Response")
-                st.write(answer)
-
-            except Exception as e:
-
-                st.error(f"Error: {e}")
 # -----------------------------------
 # AI ASSISTANT
 # -----------------------------------
