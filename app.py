@@ -4,32 +4,25 @@ from streamlit_folium import st_folium
 from services.location import get_coordinates
 from services.hospitals import get_nearby_hospitals
 from services.routes import get_route, traffic_status
-from services.ai_assistant import ask_ollama
+from services.ai_assistant import ask_ollama, ask_openai
 
 # -----------------------------------
 # CENTRALIZED TRANSLATION DICTIONARY
 # -----------------------------------
 LANGUAGES = {
     "English": {
-        # Hero
         "hero_title": "RapidAid — Get help, faster.",
         "hero_subtitle": "Real-time hospital routing, live traffic intelligence, and one-tap access to emergency services.",
         "hero_badge": "AI Emergency Navigator · Live",
-
-        # Section headings
         "section_location": "📍 Your Location",
         "section_hospitals": "🏥 Nearby Hospitals",
         "section_hospital_list": "📋 Hospital List",
         "section_map": "🗺️ Live Map",
         "section_contacts": "🚨 Emergency Contacts",
         "section_assistant": "🤖 AI Emergency Assistant",
-
-        # Location inputs
         "label_city": "City or area",
         "btn_use_location": "📍  Use Current Location",
         "btn_find_help": "🔍  Find Nearest Help",
-
-        # Hospital table columns
         "col_hospital": "Hospital",
         "col_distance": "Distance",
         "col_eta": "ETA",
@@ -42,21 +35,20 @@ LANGUAGES = {
         "status_live": "Live",
         "btn_directions": "Directions",
         "label_top_hospital": "Top Hospital",
-
-        # Map
         "map_destination": "🏥 Destination",
+<<<<<<< HEAD
         "map_your_location": "Your Location",
         "map_you": "You",
 
         # Emergency contacts
+=======
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "Ambulance",
         "ec_ambulance_sub": "24/7 Medical Emergency",
         "ec_police_label": "Police",
         "ec_police_sub": "National Emergency Line",
         "ec_fire_label": "Fire Brigade",
         "ec_fire_sub": "Fire & Rescue Services",
-
-        # AI Assistant
         "label_ai_mode": "Choose AI Mode",
         "label_api_key": "Enter OpenAI API Key",
         "label_question": "Ask an emergency question",
@@ -66,44 +58,39 @@ LANGUAGES = {
         "warn_no_question": "Please enter a question.",
         "err_ai": "Error",
         "spinner_ai": "Getting AI advice...",
-
-        # AI language instruction (injected into prompt)
-        "ai_lang_instruction": "Answer in English.",
-
-        # Errors / warnings
         "err_location_not_found": "Location not found",
         "msg_selected": "Selected",
-
-        # Footer
         "footer_tagline": "Smart Emergency Route Finder",
         "footer_credit": "Built with ❤️ for safer cities - By: M.Anila, P.Shivani",
-
-        # Language screen
         "lang_screen_title": "Choose Your Language",
         "lang_select_label": "Select Language",
         "btn_continue": "Continue",
+        # City dropdown labels
+        "city_hyderabad": "Hyderabad",
+        "city_banjara":   "Hyderabad, Banjara Hills",
+        "city_miyapur":   "Hyderabad, Miyapur",
+        "city_uppal":     "Hyderabad, Uppal",
+        # Traffic status
+        "traffic_normal":   "Normal",
+        "traffic_moderate": "Moderate",
+        "traffic_heavy":    "Heavy",
+        # Units
+        "unit_km":  "km",
+        "unit_min": "min",
     },
-
     "Telugu": {
-        # Hero
         "hero_title": "రాపిడ్ ఎయిడ్ — వేగంగా సహాయం పొందండి.",
         "hero_subtitle": "రియల్-టైమ్ ఆసుపత్రి మార్గం, లైవ్ ట్రాఫిక్ సమాచారం, మరియు అత్యవసర సేవలకు వన్-ట్యాప్ యాక్సెస్.",
         "hero_badge": "AI అత్యవసర నావిగేటర్ · లైవ్",
-
-        # Section headings
         "section_location": "📍 మీ స్థానం",
         "section_hospitals": "🏥 సమీప ఆసుపత్రులు",
         "section_hospital_list": "📋 ఆసుపత్రి జాబితా",
         "section_map": "🗺️ లైవ్ మ్యాప్",
         "section_contacts": "🚨 అత్యవసర సంప్రదింపులు",
         "section_assistant": "🤖 AI అత్యవసర సహాయకుడు",
-
-        # Location inputs
         "label_city": "నగరం లేదా ప్రాంతం",
         "btn_use_location": "📍  ప్రస్తుత స్థానాన్ని ఉపయోగించండి",
         "btn_find_help": "🔍  సమీప సహాయం కనుగొనండి",
-
-        # Hospital table columns
         "col_hospital": "ఆసుపత్రి",
         "col_distance": "దూరం",
         "col_eta": "సమయం",
@@ -116,21 +103,20 @@ LANGUAGES = {
         "status_live": "లైవ్",
         "btn_directions": "దిశలు",
         "label_top_hospital": "అగ్రశ్రేణి ఆసుపత్రి",
-
-        # Map
         "map_destination": "🏥 గమ్యస్థానం",
+<<<<<<< HEAD
         "map_your_location": "మీ స్థానం",
         "map_you": "మీరు",
 
         # Emergency contacts
+=======
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "అంబులెన్స్",
         "ec_ambulance_sub": "24/7 వైద్య అత్యవసర స్థితి",
         "ec_police_label": "పోలీసు",
         "ec_police_sub": "జాతీయ అత్యవసర లైన్",
         "ec_fire_label": "అగ్నిమాపక దళం",
         "ec_fire_sub": "అగ్నిమాపక & రెస్క్యూ సేవలు",
-
-        # AI Assistant
         "label_ai_mode": "AI మోడ్ ఎంచుకోండి",
         "label_api_key": "OpenAI API కీని నమోదు చేయండి",
         "label_question": "అత్యవసర ప్రశ్న అడగండి",
@@ -140,44 +126,39 @@ LANGUAGES = {
         "warn_no_question": "దయచేసి ఒక ప్రశ్న నమోదు చేయండి.",
         "err_ai": "లోపం",
         "spinner_ai": "AI సలహా పొందుతున్నారు...",
-
-        # AI language instruction
-        "ai_lang_instruction": "దయచేసి కేవలం తెలుగులో మాత్రమే సమాధానం ఇవ్వండి.",
-
-        # Errors / warnings
         "err_location_not_found": "స్థానం కనుగొనబడలేదు",
         "msg_selected": "ఎంచుకున్నారు",
-
-        # Footer
         "footer_tagline": "స్మార్ట్ అత్యవసర మార్గ అన్వేషకుడు",
         "footer_credit": "సురక్షిత నగరాల కోసం ❤️ తో నిర్మించబడింది - రచయితలు: M.అనిల, P.శివాని",
-
-        # Language screen
         "lang_screen_title": "మీ భాషను ఎంచుకోండి",
         "lang_select_label": "భాష ఎంచుకోండి",
         "btn_continue": "కొనసాగించు",
+        # City dropdown labels
+        "city_hyderabad": "హైదరాబాద్",
+        "city_banjara":   "హైదరాబాద్, బంజారా హిల్స్",
+        "city_miyapur":   "హైదరాబాద్, మియాపూర్",
+        "city_uppal":     "హైదరాబాద్, ఉప్పల్",
+        # Traffic status
+        "traffic_normal":   "సాధారణం",
+        "traffic_moderate": "మోస్తరు",
+        "traffic_heavy":    "భారీ",
+        # Units
+        "unit_km":  "కి.మీ",
+        "unit_min": "నిమి",
     },
-
     "Hindi": {
-        # Hero
         "hero_title": "रैपिडएड — जल्दी सहायता पाएं।",
         "hero_subtitle": "रियल-टाइम अस्पताल रूटिंग, लाइव ट्रैफिक इंटेलिजेंस, और आपातकालीन सेवाओं तक वन-टैप एक्सेस।",
         "hero_badge": "AI आपातकालीन नेविगेटर · लाइव",
-
-        # Section headings
         "section_location": "📍 आपका स्थान",
         "section_hospitals": "🏥 पास के अस्पताल",
         "section_hospital_list": "📋 अस्पताल सूची",
         "section_map": "🗺️ लाइव मैप",
         "section_contacts": "🚨 आपातकालीन संपर्क",
         "section_assistant": "🤖 AI आपातकालीन सहायक",
-
-        # Location inputs
         "label_city": "शहर या क्षेत्र",
         "btn_use_location": "📍  वर्तमान स्थान उपयोग करें",
         "btn_find_help": "🔍  नजदीकी सहायता खोजें",
-
-        # Hospital table columns
         "col_hospital": "अस्पताल",
         "col_distance": "दूरी",
         "col_eta": "समय",
@@ -190,21 +171,20 @@ LANGUAGES = {
         "status_live": "लाइव",
         "btn_directions": "दिशाएं",
         "label_top_hospital": "शीर्ष अस्पताल",
-
-        # Map
         "map_destination": "🏥 गंतव्य",
+<<<<<<< HEAD
         "map_your_location": "आपका स्थान",
         "map_you": "आप",
 
         # Emergency contacts
+=======
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "एम्बुलेंस",
         "ec_ambulance_sub": "24/7 चिकित्सा आपातकाल",
         "ec_police_label": "पुलिस",
         "ec_police_sub": "राष्ट्रीय आपातकालीन लाइन",
         "ec_fire_label": "अग्निशमन दल",
         "ec_fire_sub": "अग्निशमन और बचाव सेवाएं",
-
-        # AI Assistant
         "label_ai_mode": "AI मोड चुनें",
         "label_api_key": "OpenAI API कुंजी दर्ज करें",
         "label_question": "आपातकालीन प्रश्न पूछें",
@@ -214,33 +194,48 @@ LANGUAGES = {
         "warn_no_question": "कृपया एक प्रश्न दर्ज करें।",
         "err_ai": "त्रुटि",
         "spinner_ai": "AI सलाह प्राप्त की जा रही है...",
-
-        # AI language instruction
-        "ai_lang_instruction": "कृपया केवल हिंदी में उत्तर दें।",
-
-        # Errors / warnings
         "err_location_not_found": "स्थान नहीं मिला",
         "msg_selected": "चुना गया",
-
-        # Footer
         "footer_tagline": "स्मार्ट आपातकालीन मार्ग खोजक",
         "footer_credit": "सुरक्षित शहरों के लिए ❤️ के साथ बनाया गया - द्वारा: M.अनिला, P.शिवानी",
-
-        # Language screen
         "lang_screen_title": "अपनी भाषा चुनें",
         "lang_select_label": "भाषा चुनें",
         "btn_continue": "जारी रखें",
+        # City dropdown labels
+        "city_hyderabad": "हैदराबाद",
+        "city_banjara":   "हैदराबाद, बंजारा हिल्स",
+        "city_miyapur":   "हैदराबाद, मियापुर",
+        "city_uppal":     "हैदराबाद, उप्पल",
+        # Traffic status
+        "traffic_normal":   "सामान्य",
+        "traffic_moderate": "मध्यम",
+        "traffic_heavy":    "भारी",
+        # Units
+        "unit_km":  "कि.मी",
+        "unit_min": "मिनट",
     },
 }
 
 
 # -----------------------------------
-# HELPER FUNCTION
+# TRANSLATION HELPER  ← callable function, NOT a dict alias
 # -----------------------------------
 def t(key: str) -> str:
-    """Look up a translation key for the active language, falling back to English."""
+    """Return the translation for `key` in the active language, falling back to English."""
     lang = st.session_state.get("language", "English")
-    return LANGUAGES.get(lang, LANGUAGES["English"]).get(key, LANGUAGES["English"].get(key, key))
+    return LANGUAGES.get(lang, LANGUAGES["English"]).get(
+        key, LANGUAGES["English"].get(key, key)
+    )
+
+
+def translate_traffic(status: str) -> str:
+    """Translate English traffic status ('Normal'/'Moderate'/'Heavy') to active language."""
+    mapping = {
+        "Normal":   "traffic_normal",
+        "Moderate": "traffic_moderate",
+        "Heavy":    "traffic_heavy",
+    }
+    return t(mapping.get(status, "traffic_normal"))
 
 
 def localized_traffic(status: str) -> str:
@@ -261,7 +256,7 @@ def localized_eta(eta: float) -> str:
 
 
 # -----------------------------------
-# PAGE CONFIG (must be first Streamlit call)
+# PAGE CONFIG  (must be first Streamlit call)
 # -----------------------------------
 st.set_page_config(
     page_title="RapidAid — AI Emergency Navigator",
@@ -269,6 +264,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+<<<<<<< HEAD
 if "language" in st.session_state:
     st.session_state.language = st.sidebar.selectbox(
         "Language",
@@ -276,6 +272,8 @@ if "language" in st.session_state:
         index=list(LANGUAGES.keys()).index(st.session_state.language),
     )
 
+=======
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
 
 # -----------------------------------
 # LANGUAGE SELECTION SCREEN
@@ -285,10 +283,7 @@ if "language" not in st.session_state:
     st.subheader("భాష ఎంచుకోండి")
     st.subheader("भाषा चुनें")
 
-    selected_language = st.selectbox(
-        "Select Language",
-        ["English", "Telugu", "Hindi"]
-    )
+    selected_language = st.selectbox("Select Language", ["English", "Telugu", "Hindi"])
 
     if st.button("Continue"):
         st.session_state.language = selected_language
@@ -297,25 +292,21 @@ if "language" not in st.session_state:
     st.stop()
 
 # -----------------------------------
-# PREMIUM CUSTOM CSS (unchanged)
+# PREMIUM CUSTOM CSS
 # -----------------------------------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ---------- GLOBAL ---------- */
 html, body, [class*="css"], .stApp, .stMarkdown, p, span, div, label {
     font-family: 'Inter', sans-serif !important;
     color: #e6edf7 !important;
 }
-
 h1, h2, h3, h4, h5 {
     font-family: 'Space Grotesk', sans-serif !important;
     letter-spacing: -0.02em !important;
     color: #ffffff !important;
 }
-
-/* ---------- BACKGROUND ---------- */
 .stApp {
     background:
         radial-gradient(1200px 600px at 10% -10%, rgba(99,102,241,0.25), transparent 60%),
@@ -324,7 +315,6 @@ h1, h2, h3, h4, h5 {
         linear-gradient(160deg, #050816 0%, #0b1023 45%, #0a0f1f 100%);
     background-attachment: fixed;
 }
-
 .stApp::before {
     content: "";
     position: fixed;
@@ -337,7 +327,6 @@ h1, h2, h3, h4, h5 {
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
     z-index: 0;
 }
-
 .block-container {
     padding-top: 1.5rem !important;
     padding-bottom: 4rem !important;
@@ -345,10 +334,8 @@ h1, h2, h3, h4, h5 {
     position: relative;
     z-index: 1;
 }
-
 #MainMenu, footer, header [data-testid="stToolbar"] { visibility: hidden; }
 
-/* ---------- HERO ---------- */
 .hero {
     position: relative;
     overflow: hidden;
@@ -359,9 +346,7 @@ h1, h2, h3, h4, h5 {
     border: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    box-shadow:
-        0 20px 60px -20px rgba(99,102,241,0.45),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px -20px rgba(99,102,241,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .hero::after {
     content: "";
@@ -376,7 +361,6 @@ h1, h2, h3, h4, h5 {
     0%,100% { transform: translateY(0) translateX(0); }
     50% { transform: translateY(-20px) translateX(15px); }
 }
-
 .hero-badge {
     display: inline-flex;
     align-items: center;
@@ -403,7 +387,6 @@ h1, h2, h3, h4, h5 {
     70% { box-shadow: 0 0 0 12px rgba(34,211,238,0); }
     100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); }
 }
-
 .hero h1 {
     font-size: 2.6rem !important;
     font-weight: 700 !important;
@@ -419,8 +402,6 @@ h1, h2, h3, h4, h5 {
     max-width: 620px;
     margin: 0 !important;
 }
-
-/* ---------- SECTION HEADERS ---------- */
 .section-title {
     display: flex;
     align-items: center;
@@ -435,8 +416,6 @@ h1, h2, h3, h4, h5 {
     border-radius: 4px;
     background: linear-gradient(180deg, #6366f1, #ec4899);
 }
-
-/* ---------- GLASS CARDS ---------- */
 .glass {
     background: rgba(17, 24, 39, 0.55);
     border: 1px solid rgba(255,255,255,0.08);
@@ -452,8 +431,6 @@ h1, h2, h3, h4, h5 {
     border-color: rgba(99,102,241,0.45);
     box-shadow: 0 18px 50px -12px rgba(99,102,241,0.35);
 }
-
-/* ---------- INPUTS ---------- */
 [data-testid="stTextInput"] label, [data-testid="stSelectbox"] label {
     color: #cbd5e1 !important;
     font-weight: 500 !important;
@@ -475,8 +452,6 @@ h1, h2, h3, h4, h5 {
     outline: none !important;
 }
 [data-testid="stTextInput"] input::placeholder { color: #64748b !important; }
-
-/* ---------- BUTTONS ---------- */
 .stButton > button {
     width: 100%;
     height: 3.2rem;
@@ -497,8 +472,6 @@ h1, h2, h3, h4, h5 {
     box-shadow: 0 16px 40px -10px rgba(236,72,153,0.6), inset 0 1px 0 rgba(255,255,255,0.25) !important;
 }
 .stButton > button:active { transform: translateY(0); }
-
-/* ---------- KPI / METRIC CARDS ---------- */
 [data-testid="stMetric"] {
     background: rgba(17, 24, 39, 0.6);
     border: 1px solid rgba(255,255,255,0.08);
@@ -534,8 +507,6 @@ h1, h2, h3, h4, h5 {
     font-size: 1.7rem !important;
     font-weight: 700 !important;
 }
-
-/* ---------- DATAFRAME ---------- */
 [data-testid="stDataFrame"] {
     border-radius: 16px;
     overflow: hidden;
@@ -543,8 +514,6 @@ h1, h2, h3, h4, h5 {
     background: rgba(17,24,39,0.6);
     backdrop-filter: blur(12px);
 }
-
-/* ---------- ALERTS / INFO ---------- */
 [data-testid="stAlert"] {
     border-radius: 16px !important;
     border: 1px solid rgba(255,255,255,0.08) !important;
@@ -552,8 +521,6 @@ h1, h2, h3, h4, h5 {
     background: rgba(30,41,59,0.6) !important;
     color: #e2e8f0 !important;
 }
-
-/* ---------- EMERGENCY CONTACT CARDS ---------- */
 .emergency-card {
     position: relative;
     padding: 26px 22px;
@@ -592,15 +559,10 @@ h1, h2, h3, h4, h5 {
     line-height: 1;
     margin-bottom: 4px;
 }
-.emergency-card .ec-sub {
-    font-size: 0.85rem;
-    opacity: 0.85;
-}
+.emergency-card .ec-sub { font-size: 0.85rem; opacity: 0.85; }
 .ec-ambulance { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); box-shadow: 0 14px 40px -12px rgba(239,68,68,0.55); }
 .ec-police    { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 14px 40px -12px rgba(59,130,246,0.55); }
 .ec-fire      { background: linear-gradient(135deg, #f59e0b 0%, #c2410c 100%); box-shadow: 0 14px 40px -12px rgba(245,158,11,0.55); }
-
-/* ---------- STATUS PILL ---------- */
 .status-pill {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(34,197,94,0.12);
@@ -619,16 +581,12 @@ h1, h2, h3, h4, h5 {
     70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
     100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
 }
-
-/* ---------- DIVIDER ---------- */
 hr {
     border: none !important;
     height: 1px !important;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent) !important;
     margin: 32px 0 !important;
 }
-
-/* ---------- FOOTER ---------- */
 .footer-bar {
     margin-top: 40px;
     padding: 18px 22px;
@@ -641,8 +599,6 @@ hr {
     font-size: 13px;
 }
 .footer-bar strong { color: #e2e8f0; }
-
-/* ---------- ANIMATIONS ---------- */
 .fade-in { animation: fadeIn .6s ease both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform:none;} }
 </style>
@@ -662,18 +618,24 @@ st.markdown(f"""
 # -----------------------------------
 # LOCATION INPUT
 # -----------------------------------
-st.markdown(f'<div class="section-title"><span class="bar"></span>{t("section_location")}</div>', unsafe_allow_html=True)
+st.markdown(
+    f'<div class="section-title"><span class="bar"></span>{t("section_location")}</div>',
+    unsafe_allow_html=True,
+)
 
 with st.container():
-    city = st.selectbox(
+    # Map translated label → internal English key used for coords lookup
+    CITY_LABEL_TO_KEY = {
+        t("city_hyderabad"): "Hyderabad",
+        t("city_banjara"):   "Hyderabad, Banjara Hills",
+        t("city_miyapur"):   "Hyderabad, Miyapur",
+        t("city_uppal"):     "Hyderabad, Uppal",
+    }
+    city_label = st.selectbox(
         t("label_city"),
-        [
-            "Hyderabad",
-            "Hyderabad, Banjara Hills",
-            "Hyderabad, Miyapur",
-            "Hyderabad, Uppal",
-        ]
+        list(CITY_LABEL_TO_KEY.keys()),
     )
+    city = CITY_LABEL_TO_KEY[city_label]  # always an English key for coords
     col1, col2 = st.columns(2)
     with col1:
         current_location = st.button(t("btn_use_location"))
@@ -722,11 +684,17 @@ if st.session_state.get("searched", False):
         with c1:
             st.metric(t("label_top_hospital"), first_hospital["name"])
         with c2:
+<<<<<<< HEAD
             st.metric(t("col_distance"), localized_distance(distance))
         with c3:
             st.metric(t("col_eta"), localized_eta(eta))
+=======
+            st.metric(t("col_distance"), f"{distance} {t('unit_km')}")
+        with c3:
+            st.metric(t("col_eta"), f"{eta} {t('unit_min')}")
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         with c4:
-            st.metric(t("col_traffic"), traffic)
+            st.metric(t("col_traffic"), translate_traffic(traffic))
 
     st.markdown(
         f'<div class="section-title" style="margin-top:28px;"><span class="bar"></span>{t("section_hospital_list")}</div>',
@@ -734,7 +702,7 @@ if st.session_state.get("searched", False):
     )
 
     hospital_list = st.session_state.get("hospitals", [])
-    for hospital in hospital_list[:10]:
+    for idx, hospital in enumerate(hospital_list[:10]):
         try:
             distance, eta = get_route(
                 st.session_state["user_lat"],
@@ -747,13 +715,20 @@ if st.session_state.get("searched", False):
             with col1:
                 st.write(f"🏥 {hospital['name']}")
             with col2:
+<<<<<<< HEAD
                 st.write(localized_distance(distance))
             with col3:
                 st.write(localized_eta(eta))
+=======
+                st.write(f"{distance} {t('unit_km')}")
+            with col3:
+                st.write(f"{eta} {t('unit_min')}")
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
             with col4:
-                st.write(traffic)
+                st.write(translate_traffic(traffic))
             with col5:
-                if st.button(t("btn_directions"), key=hospital["name"]):
+                # Use a numeric key so non-ASCII labels don't break Streamlit widget IDs
+                if st.button(t("btn_directions"), key=f"dir_{idx}"):
                     st.session_state["selected_hospital"] = hospital
                     st.success(f"{t('msg_selected')}: {hospital['name']}")
                     st.rerun()
@@ -846,8 +821,13 @@ with e3:
         <div class="ec-number">101</div>
         <div class="ec-sub">{t("ec_fire_sub")}</div>
     </div>""", unsafe_allow_html=True)
+
 # -----------------------------------
+<<<<<<< HEAD
 # AI ASSISTANT
+=======
+# AI ASSISTANT  (single, fully translated block)
+>>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
 # -----------------------------------
 st.markdown(
     f'<div class="section-title"><span class="bar"></span>{t("section_assistant")}</div>',
@@ -856,7 +836,7 @@ st.markdown(
 
 model_type = st.selectbox(
     t("label_ai_mode"),
-    ["Local Ollama", "BYOK OpenAI"]
+    ["Local Ollama", "BYOK OpenAI"],
 )
 
 api_key = ""
@@ -873,15 +853,19 @@ if st.button(t("btn_get_advice")):
         st.warning(t("warn_no_question"))
     else:
         with st.spinner(t("spinner_ai")):
+            language = st.session_state.get("language", "English")
             try:
-                # Prepend language instruction so the model responds in the right language
-                lang_instruction = t("ai_lang_instruction")
-                localized_question = f"{lang_instruction}\n\n{question}"
-
-                answer = ask_ollama(localized_question)
-
-                st.markdown(t("ai_response_header"))
-                st.write(answer)
+                if model_type == "BYOK OpenAI":
+                    if not api_key:
+                        st.warning(t("label_api_key"))
+                    else:
+                        answer = ask_openai(question, api_key, language)
+                        st.markdown(t("ai_response_header"))
+                        st.markdown(answer)
+                else:
+                    answer = ask_ollama(question, language)
+                    st.markdown(t("ai_response_header"))
+                    st.markdown(answer)
             except Exception as e:
                 st.error(f"{t('err_ai')}: {e}")
 
