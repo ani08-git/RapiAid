@@ -2,7 +2,7 @@
 
 > Real-Time Emergency Hospital Locator & Route Navigation System
 
-RapidAid is an AI-assisted emergency navigation platform designed to help users quickly locate nearby hospitals, estimate travel time, analyze traffic conditions, and view routes on a live map during critical situations.
+RapidAid is an AI-powered emergency navigation platform that helps users locate nearby hospitals, access emergency contacts, receive AI-assisted guidance, analyze traffic conditions, and navigate emergencies in their preferred language. The platform supports multilingual interaction, local AI inference through Ollama, and Bring Your Own Token (BYOT) integration for external AI providers.
 
 ---
 
@@ -27,8 +27,24 @@ RapidAid combines location services, mapping technologies, and routing APIs to h
 The system uses real-time geographic data instead of static datasets, ensuring accurate and up-to-date information.
 
 ---
+# AI Features
 
-# Key Features
+RapidAid integrates Generative AI to provide emergency assistance and guidance.
+
+### AI Emergency Assistant
+Users can ask emergency-related questions and receive contextual guidance.
+
+### Local AI with Ollama
+The platform supports local model inference through Ollama, enabling privacy-focused and offline-capable AI responses.
+
+### Bring Your Own Token (BYOT)
+Users can connect their own API keys and use external AI providers without being locked into a single service.
+
+### Language-Aware Responses
+AI responses are automatically adapted based on the selected application language.
+---
+
+## Key Features
 
 - 📍 Convert user locations into coordinates
 - 🏥 Discover nearby hospitals in real time
@@ -36,8 +52,12 @@ The system uses real-time geographic data instead of static datasets, ensuring a
 - ⏱️ Estimate travel time (ETA)
 - 🚦 Display traffic status
 - 🗺️ Interactive live map visualization
-- 📌 Hospital location markers
 - 🚑 Emergency contact section
+- 🤖 AI Emergency Assistant
+- 🦙 Local AI inference using Ollama
+- 🔑 Bring Your Own Token (BYOT) support
+- 🌐 Multilingual Support (English, Hindi, Telugu)
+- 📌 Hospital location markers
 - 🌍 Real-time OpenStreetMap integration
 
 ---
@@ -94,8 +114,11 @@ Interactive Map Display
 
 # System Architecture
 
-```text
 Frontend (Streamlit)
+        │
+        ▼
+Localization Layer
+(English / Hindi / Telugu)
         │
         ▼
 Location Service
@@ -110,12 +133,15 @@ Route Calculation Service
 (OpenRouteService API)
         │
         ▼
+AI Assistant Layer
+(Ollama / BYOT)
+        │
+        ▼
 Traffic & ETA Analysis
         │
         ▼
 Live Map Visualization
 (Folium)
-```
 
 ---
 
@@ -129,8 +155,11 @@ Live Map Visualization
 | Geocoding | Geopy |
 | Hospital Search | OpenStreetMap Overpass API |
 | Routing | OpenRouteService API |
+| AI Assistant | Ollama |
+| AI Integration | BYOT |
+| Localization | Python i18n/l10n |
 | Map Data | OpenStreetMap |
-| Version Control | Git & GitHub |
+| Version Control | Git, GitHub, GitLab |
 
 ---
 
@@ -298,16 +327,37 @@ streamlit run app.py
 ```
 
 ---
+# Accessibility & Localization
+
+RapidAid is designed to improve accessibility during emergencies.
+
+Features include:
+
+- English language support
+- Hindi language support
+- Telugu language support
+- Dynamic language switching
+- Language-aware AI responses
+- User-friendly emergency workflows
+
+# Offline-First Design
+
+RapidAid supports local AI inference through Ollama, allowing emergency guidance even when cloud AI services are unavailable.
+
+Benefits:
+
+- Reduced internet dependency
+- Improved privacy
+- Faster local inference
+- Better reliability during emergencies
 
 # Future Enhancements
 
-- 🚑 Live Ambulance Tracking
-- 🏥 Hospital Specialization Filters
-- 📞 Emergency Contact Integration
-- 🤖 AI-Based Emergency Recommendations
-- 🚦 Advanced Traffic Prediction
-- 📍 GPS-Based Current Location Detection
-- 📱 Mobile Application Support
+- 🌍 Additional Indian language support
+- 🗣️ Voice-based emergency assistance
+- 📡 Offline map caching
+- 🤖 Advanced multimodal AI assistant
+- 📞 Voice calling emergency services
 
 ---
 
