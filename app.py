@@ -36,13 +36,10 @@ LANGUAGES = {
         "btn_directions": "Directions",
         "label_top_hospital": "Top Hospital",
         "map_destination": "🏥 Destination",
-<<<<<<< HEAD
         "map_your_location": "Your Location",
         "map_you": "You",
 
         # Emergency contacts
-=======
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "Ambulance",
         "ec_ambulance_sub": "24/7 Medical Emergency",
         "ec_police_label": "Police",
@@ -104,13 +101,10 @@ LANGUAGES = {
         "btn_directions": "దిశలు",
         "label_top_hospital": "అగ్రశ్రేణి ఆసుపత్రి",
         "map_destination": "🏥 గమ్యస్థానం",
-<<<<<<< HEAD
         "map_your_location": "మీ స్థానం",
         "map_you": "మీరు",
 
         # Emergency contacts
-=======
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "అంబులెన్స్",
         "ec_ambulance_sub": "24/7 వైద్య అత్యవసర స్థితి",
         "ec_police_label": "పోలీసు",
@@ -172,13 +166,10 @@ LANGUAGES = {
         "btn_directions": "दिशाएं",
         "label_top_hospital": "शीर्ष अस्पताल",
         "map_destination": "🏥 गंतव्य",
-<<<<<<< HEAD
         "map_your_location": "आपका स्थान",
         "map_you": "आप",
 
         # Emergency contacts
-=======
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         "ec_ambulance_label": "एम्बुलेंस",
         "ec_ambulance_sub": "24/7 चिकित्सा आपातकाल",
         "ec_police_label": "पुलिस",
@@ -264,7 +255,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-<<<<<<< HEAD
 if "language" in st.session_state:
     st.session_state.language = st.sidebar.selectbox(
         "Language",
@@ -272,8 +262,6 @@ if "language" in st.session_state:
         index=list(LANGUAGES.keys()).index(st.session_state.language),
     )
 
-=======
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
 
 # -----------------------------------
 # LANGUAGE SELECTION SCREEN
@@ -684,15 +672,9 @@ if st.session_state.get("searched", False):
         with c1:
             st.metric(t("label_top_hospital"), first_hospital["name"])
         with c2:
-<<<<<<< HEAD
             st.metric(t("col_distance"), localized_distance(distance))
         with c3:
             st.metric(t("col_eta"), localized_eta(eta))
-=======
-            st.metric(t("col_distance"), f"{distance} {t('unit_km')}")
-        with c3:
-            st.metric(t("col_eta"), f"{eta} {t('unit_min')}")
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
         with c4:
             st.metric(t("col_traffic"), translate_traffic(traffic))
 
@@ -715,15 +697,9 @@ if st.session_state.get("searched", False):
             with col1:
                 st.write(f"🏥 {hospital['name']}")
             with col2:
-<<<<<<< HEAD
                 st.write(localized_distance(distance))
             with col3:
                 st.write(localized_eta(eta))
-=======
-                st.write(f"{distance} {t('unit_km')}")
-            with col3:
-                st.write(f"{eta} {t('unit_min')}")
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
             with col4:
                 st.write(translate_traffic(traffic))
             with col5:
@@ -823,11 +799,7 @@ with e3:
     </div>""", unsafe_allow_html=True)
 
 # -----------------------------------
-<<<<<<< HEAD
 # AI ASSISTANT
-=======
-# AI ASSISTANT  (single, fully translated block)
->>>>>>> 410dd3e1c0e88be261d2139de84041c745e91fef
 # -----------------------------------
 st.markdown(
     f'<div class="section-title"><span class="bar"></span>{t("section_assistant")}</div>',
